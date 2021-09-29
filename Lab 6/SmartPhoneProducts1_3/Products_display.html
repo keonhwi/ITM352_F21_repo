@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="products-style.css" type="text/css" />
 
     <script>
+        var first_name="Kenny";
+        var last_name="Rah";
         var store_name = "Kenny Rah";
     </script>
 
@@ -31,8 +33,8 @@
     <div>
         <main>
             <section class="item" id="HTC" 
-                onmouseover="hits_span.innerHTML = hits; spins_span.innerHTML = spins; this.className = 'item rotate';"
-                onclick="hits_span.innerHTML = hits; spins_span.innerHTML = spins;this.className = 'item';">
+                onmouseover="this.className = 'item rotate';spins_span.innerHTML++;"
+                onclick="this.className = 'item';hits_span.innerHTML=++hits;">
                 <h2>HTC</h2>
                 <p>&dollar;40.00</p>
                 <img src=http://dport96.github.io/ITM352/morea/080.flow-control-II/HTC.jpg>
@@ -79,6 +81,9 @@
 
 </html>
 <script>
-   var hits = 1;
-    var spins= 5;
+    var hits = 0;
+    var spins= 0;
+    hits_span.innerHTML=hits;
+    spins_span.innerHTML=spins;
+
 </script>
