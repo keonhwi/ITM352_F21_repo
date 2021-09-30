@@ -15,7 +15,8 @@ main {
     justify-content: space-around;}
 
 /* block styling */
-div {border: 5px solid black;
+div {
+  border: 5px solid grey;
         display: flex;
       }
 
