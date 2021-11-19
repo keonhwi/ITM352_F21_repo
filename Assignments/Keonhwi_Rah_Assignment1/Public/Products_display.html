@@ -1,3 +1,5 @@
+<!--helped and borrow some cod from Xinfei-->
+
 <script>
    function isNonNegInt(q, return_errors = false) {
         errors = []; // assume no errors at first
@@ -89,7 +91,7 @@
                         <section class="item">
                             <h2>${products[i].brand}</h2>
                             <p>$${products[i].price}</p>
-                            <label id="quantity${i}_label"}"> Quantity (Only ${products[i].inventory} available)</label>
+                            <label id="quantity${i}_label"}"> Quantity </label>
                             <input type="text" placeholder="" name="quantity${i}"
                             onkeyup="checkQuantityTextbox(this);">
                             <img src="${products[i].image}">
@@ -100,7 +102,7 @@
                     </main>
                 </div>
          
-                    
+                    <!--this is houw we will be able to et the invoice-->
                     <input type="submit" class="button" value="Purchase" name="purchase_submit">
         
             
