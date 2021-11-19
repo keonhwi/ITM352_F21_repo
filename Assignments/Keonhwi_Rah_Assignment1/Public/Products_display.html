@@ -1,33 +1,72 @@
-<script src="./products_data.js"></script>
+<script>
+   let params = (new URL(document.location)).searchParams;
+	window.onload = () =>  {
+		if(params.has('quantity')) {
+		var quantities = JSON.parse(params.get('quantity'));
+		for(i in quantities) {
+		order_form[`quantity[${i}]`].value = quantities[i];
+			}
+		}
+		
+		//set up so if errors occur, it will alert the user in a pop up
+		if(params.has('errors')) {
+		var errors = JSON.parse(params.get('errors')); 
+		let err_str = '';
+		for(err in  errors) {
+		err_str += errors[err] + '\n';
+			}
+			alert(err_str);
+		}
+	}
+    function isNonNegInt(q, returnErrors = false) {
+    errors = []; // assume no errors at first
+    if (q == '') q = 0; //Blank quantities = 0
+    if (Number(q) != q) errors.push('Not a number!'); // Check if string is a number value. 
+    else {
+    if(q>5) errors.push('Only 10 in stock'); //Checks quantity
+    if (q < 0) errors.push('Negative value!'); // Check if it is non-negative
+
+        if (parseInt(q) != q) errors.push('Not an integer!'); // Check that it is an integer
+
+    }
+    return returnErrors ? errors : (errors.length == 0);
+}
+</script>
+
+<script src="./product_data.js"></script>
 
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8">
     <title>Surf Board Store</title>
 
     <link href="https://fonts.googleapis.com/css?family=Cherry+Swash|Raleway" rel="stylesheet">
 
-    <link href="https://github.com/keonhwi/ITM352_F21_repo/blob/main/Assignments/Keonhwi_Rah_Assignment1/Public/products-style.css" rel="stylesheet">
+    <link href="./products-style.css" rel="stylesheet">
 </head>
 
 <body>
     
-    <header>
+    <header id="header">
+        <div class="innertube">
         <h1>Kenny's Surf Board Store</h1>
-    </header>
+        <form name="order_form" action="./process_form" method="POST"></form>
+    </div>
+</header>
     <div>
         <aside>
-            <div style="font-size:4rem;text-align:center;font-weight: bold;font-style: italic; color: white">
-                We sell from
-                around the globe!
+            <div style="font-size:4rem;text-align:center;font-weight: bold;font-style: italic; color: rgb(36, 198, 226)">
+               We Only 
+               sell 
+               quality 
+               products
             </div>
         </aside>
 
         <main>
             
-
+            <h1>Available Products </h1>
 
 <script>
     for(i=0; i<=products.length; i++) {
@@ -35,15 +74,22 @@ document.write(`
 <section class="item">
                 <h2>${products[i].brand}</h2>
                 <p>$${products[i].price}</P>
+                <label id="quantity${i}_label"}">${products[i].inventory} in stock</label>
+				<input type="text" placeholder="Enter Desired Amount" name="quantity[${i}]" onkeyup="checkQuantityTextbox(this);">
                 <img src="${products[i].image}">
             </section>
 `);    }
 </script>
         </main>
     </div>
+    <div>
+        <form name="product_selection_form" action="invoice.html" method="POST">
+        
+            <input type="submit" value="Purchase!" name="purchase_submit">  
+    </div>
     <footer>
         <h1>
-            Your One Stop For Used Phones
+            Best plce to get your Surf Board
         </h1>
     </footer>
 </body>

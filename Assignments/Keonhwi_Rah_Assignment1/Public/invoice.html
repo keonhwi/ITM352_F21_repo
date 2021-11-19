@@ -1,22 +1,30 @@
 <!--sample from the Invoice WODS-->
 
+<script>
+  let params = (new URL(document.location)).searchParams;
+  //code based off invoice 4 wod
+</script>
 
-<script src="products_data.js">
+<script src="product_data.js">
     /* This is for the invoice for produt data */
     
     </script>
     <script>
-      var quantities=[7,7.7,-3,'dog',-5.5];
-    
-      function generate_item_rows(product_quantities_array) {
-        for(i in products){
-                // product 
-                if(product_quantities_array[i]==0) continue;
-                errors= isNonNegInt(product_quantities_array[i], true);
-                if(errors.length == 0){
-                extended_price= products[i].price*product_quantities_array[i];
-                subtotal +=extended_price;}
-                else{extended_price=""}
+     if (params.has("quantity")) {
+
+var quantities = JSON.parse(params.get('quantity'));
+
+}
+function generate_item_rows(product_quantities_array) {
+    for (i in products) {
+      //Productrow display of products purhcased with pricing 
+      if (product_quantities_array[i] == 0) continue;
+      errors = isNonNegInt(product_quantities_array[i], true);
+      if (errors.length == 0) {
+      extended_price = products[i].price * quantities[i];
+      subtotal += extended_price;
+      } else {
+        extended_price = "";}
                 document.write(`
                 <tr>
                     <td width="43%">${products[i].brand}</td>
@@ -28,11 +36,11 @@
               }
       }
     
-      function isNonNegInt (val,returnErrors=false) {
+      function isNonNegInt (q,returnErrors=false) {
     errors = []; 
-    if(Number(val) != val) errors.push('Not a number!'); 
-    if(val < 0) errors.push('Negative value!'); 
-    if(parseInt(val) != val) errors.push('Not an integer!'); 
+    if(Number(q) != q) errors.push('Not a number!'); 
+    if(q < 0) errors.push('Negative value!'); 
+    if(parseInt(q) != q) errors.push('Not an integer!'); 
     return returnErrors ? errors : ((errors.length > 0)?false:true)
     }
     </script>
@@ -42,7 +50,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
+        <title>Invoice</title>
     </head>
     <body>
         <table border="2">
@@ -62,8 +70,8 @@
               var tax = tax_rate*subtotal;
     
               // compute shipping
-              if(subtotal<=50){shipping=2;}
-              else if(subtotal<=100){shipping=5;}
+              if(subtotal<=100){shipping=50;}
+              else if(subtotal<=300){shipping=100;}
               else{shipping=0.05*subtotal}
     
               // compute grand total
@@ -92,9 +100,9 @@
           </table>
           <div> 
             <br>
-            <b>OUR SHIPPING POLICY IS:A subtotal $0 - $49.99 will be $2 shipping
-            <br>A subtotal $50 - $99.99 will be $5 shipping
-            <br>Subtotals over $100 will be charged 5% of the subtotal amount</b>
+            <b>OUR SHIPPING POLICY IS:A subtotal $0 - $99.99 will be $50 shipping
+            <br>A subtotal $100 - $299.99 will be $100 shipping
+            <br>Subtotals over $300 will be charged 5% of the subtotal amount</b>
            
           </div>
     </body>

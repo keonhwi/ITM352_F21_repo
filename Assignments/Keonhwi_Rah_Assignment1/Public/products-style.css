@@ -4,7 +4,7 @@
  html {
   
     font-family: 'Raleway', sans-serif;
-    background-color: pink;
+    background-color: blanchedalmond;
     font-size: 10px;
     
   }
@@ -34,7 +34,7 @@
   
   h2 {
     font-size: 2rem;
-    color: greenyellow;
+    color: rgb(56, 129, 212);
     text-align: right;
     width: 160px;
     position: absolute;
@@ -102,9 +102,9 @@
   
   
   aside {
-    display: flex;
-    align-items: stretch;
-    background: url(images/phone_globe.jpg) no-repeat 50% center;
+    display: small;
+    align-items: small;
+    background: url(images/board.jpg) no-repeat 50% center;
     padding: 50px 0;
   }
   
@@ -117,22 +117,22 @@
   
   
   section {
-    width: 45%;
+    width: 70%;
     margin: 5px;
-    background-color: black;
+    background-color: lightskyblue;
     position: relative;
-    height: 215px;
+    height: 225px;
   }
   
   section p {
-    color: greenyellow;
+    color: white(56, 129, 212);
     background: grey;
     width: 50px;
     height: 50px;
     line-height: 50px;
     text-align: center;
     border-radius: 50%;
-    box-shadow: 2px 2px 1px greenyellow;
+    box-shadow: 2px 2px 1px rgb(56, 129, 212);
     position: absolute;
     right: 10px;
     bottom: -6px;
