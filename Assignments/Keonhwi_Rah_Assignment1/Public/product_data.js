@@ -25,3 +25,6 @@ var products = [
         "price" : 419.00,
         "image" :"https://www.mundo-surf.com/43361/surfboard-ms-flying-bee-round.jpg"}
 ];
+if(typeof exports != 'undefined') { // try to export this file to server.js
+        exports.products = products;
+        }

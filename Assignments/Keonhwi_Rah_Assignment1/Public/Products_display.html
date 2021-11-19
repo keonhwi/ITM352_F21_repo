@@ -1,36 +1,49 @@
 <script>
-   let params = (new URL(document.location)).searchParams;
-	window.onload = () =>  {
-		if(params.has('quantity')) {
-		var quantities = JSON.parse(params.get('quantity'));
-		for(i in quantities) {
-		order_form[`quantity[${i}]`].value = quantities[i];
-			}
-		}
-		
-		//set up so if errors occur, it will alert the user in a pop up
-		if(params.has('errors')) {
-		var errors = JSON.parse(params.get('errors')); 
-		let err_str = '';
-		for(err in  errors) {
-		err_str += errors[err] + '\n';
-			}
-			alert(err_str);
-		}
-	}
-    function isNonNegInt(q, returnErrors = false) {
-    errors = []; // assume no errors at first
-    if (q == '') q = 0; //Blank quantities = 0
-    if (Number(q) != q) errors.push('Not a number!'); // Check if string is a number value. 
-    else {
-    if(q>5) errors.push('Only 10 in stock'); //Checks quantity
-    if (q < 0) errors.push('Negative value!'); // Check if it is non-negative
-
-        if (parseInt(q) != q) errors.push('Not an integer!'); // Check that it is an integer
-
+   function isNonNegInt(q, return_errors = false) {
+        errors = []; // assume no errors at first
+        if (q == '') q = 0; // handle blank inputs as if they are 0
+        if (Number(q) != q) errors.push('<font color="red">Not a number!</font>'); // Check if string is a number value
+        else if (q > 100) errors.push('<font color="red">Only 100 in stock</font>');
+        else if (q == 0) errors.push('<font color="red">Please select!</font>');
+        else if (q < 0) errors.push('<font color="red">Negative value!</font>'); // Check if it is non-negative
+        else if (parseInt(q) != q) errors.push('<font color="red">Not an integer!</font>'); // Check that it is an integer
+        return return_errors ? errors : (errors.length == 0);
     }
-    return returnErrors ? errors : (errors.length == 0);
-}
+
+    function checkQuantityTextbox(theTextbox) {
+        errs = isNonNegInt(theTextbox.value, true);
+        if (errs.length == 0) errs = ['You want:'];
+        if (theTextbox.value.trim() == '') errs = ['Quantity'];
+        document.getElementById(theTextbox.name + '_label').innerHTML = errs.join(", ");
+    }
+
+
+    window.onload = function () {
+        let params = (new URL(document.location)).searchParams; // get the query string which has the form data
+        // form was submitted so check that quantities are valid then redirect to invoice if ok.
+        if (params.has('purchase_submit')) {
+            // check to if any quantity is invalid, then put alert 
+
+            for (i = 0; i < products.length; i++) {
+                if (params.has(`quantity${i}`)) {
+                    a_qty = params.get(`quantity${i}`);
+                    // make textboxes sticky in case of invalid data
+                    quantity_form[`quantity${i}`].value = a_qty;
+                    checkQuantityTextbox(quantity_form[`quantity${i}`]); // show where the error is
+                }
+            }
+            // alert user of errors if any
+            if (params.has('error')) {
+                var errors = JSON.parse(params.get('error'));
+                let error_str = '';
+                for (err in errors) {
+                    error_str += errors[err] + '\n';
+                }
+                alert(error_str);
+            }
+
+        }
+    }
 </script>
 
 <script src="./product_data.js"></script>
@@ -46,12 +59,11 @@
     <link href="./products-style.css" rel="stylesheet">
 </head>
 
-<body>
+<body id="thebody">
     
     <header id="header">
         <div class="innertube">
         <h1>Kenny's Surf Board Store</h1>
-        <form name="order_form" action="./process_form" method="POST"></form>
     </div>
 </header>
     <div>
@@ -68,28 +80,34 @@
             
             <h1>Available Products </h1>
 
-<script>
-    for(i=0; i<=products.length; i++) {
-document.write(`
-<section class="item">
-                <h2>${products[i].brand}</h2>
-                <p>$${products[i].price}</P>
-                <label id="quantity${i}_label"}">${products[i].inventory} in stock</label>
-				<input type="text" placeholder="Enter Desired Amount" name="quantity[${i}]" onkeyup="checkQuantityTextbox(this);">
-                <img src="${products[i].image}">
-            </section>
-`);    }
-</script>
-        </main>
-    </div>
-    <div>
-        <form name="product_selection_form" action="invoice.html" method="POST">
+            <form name="quantity_form" action="/process_form" method="post">
+                <div>
+                    <main>
+                        <script>
+                            for (i = 0; i < products.length; i++) {
+                                document.write(`
+                        <section class="item">
+                            <h2>${products[i].brand}</h2>
+                            <p>$${products[i].price}</p>
+                            <label id="quantity${i}_label"}"> Quantity (Only ${products[i].inventory} available)</label>
+                            <input type="text" placeholder="" name="quantity${i}"
+                            onkeyup="checkQuantityTextbox(this);">
+                            <img src="${products[i].image}">
+                        </section>
+                        `)
+                            }
+                        </script>
+                    </main>
+                </div>
+         
+                    
+                    <input type="submit" class="button" value="Purchase" name="purchase_submit">
         
-            <input type="submit" value="Purchase!" name="purchase_submit">  
-    </div>
+            
+            </form>
     <footer>
         <h1>
-            Best plce to get your Surf Board
+            Best plce to get Surf Board
         </h1>
     </footer>
 </body>
