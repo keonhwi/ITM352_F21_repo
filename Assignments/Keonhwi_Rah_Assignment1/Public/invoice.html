@@ -1,12 +1,12 @@
 <!--sample from the Invoice WODS-->
-<link href="./invoicestyle.css" rel="stylesheet" />
+<link href="./products-style.css" rel="stylesheet" />
 
 <script>
   let params = (new URL(document.location)).searchParams;
   //code based off invoice 4 wod
 </script>
 
-<script src="products_data.js">
+<script src="product_data.js">
   /* This file is made to show a table and receipt of certain products. There will be a total of 6 products, with their prices and quantity. */
 
 </script>
@@ -60,14 +60,17 @@
     <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Invoice</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="Products-style.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <title>Document</title>
     </head>
+    <header style="font-size:3rem;text-align:center;font-weight: bold;font-style: italic;border:cornflowerblue; border-radius: 3rem;" >Invoice</header>
     <body>
-      <table class="w3-table-all w3-card-4">
+      <table class=".w3-table-all w3-card-4">
         <thead>
-            <tr class="w3-blue">
+            <tr class=".w3-blue">
                 <th>Item</th>
                 <th>Quantity</th>
                 <th>Price</th>
@@ -86,7 +89,7 @@
                     subtotal += extended_price;
                     document.write(`
       <tr>
-        <td width="43%"><em>${products[i].name}</em></td>
+        <td width="43%"><em>${products[i].brand}</em></td>
         <td align="center" width="11%"><em>${quantities[i]}</em></td>
         <td width="13%"><em>\$${products[i].price}</em></td>
         <td width="54%"><em>\$${extended_price}</em></td>
@@ -101,14 +104,14 @@
             var tax = tax_rate * subtotal;
 
             //compute shipping
-            if (total_price <= 99.99) { //if the total Price is under $100, then $50 shipping
-                shipping = 50;
-            }
-            else if (total_price <= 299.99 ) { //if the total price 300, then we will charge $100 for shipping
+            if (subtotal <= 99.99) { //if the total Price is under $100, then $100 shipping
                 shipping = 100;
             }
+            else if (subtotal <= 299.99 ) { //if the total price 300, then we will charge $50 for shipping
+                shipping = 50;
+            }
             else {
-                shipping = 0.05 * subtotal; // 5% of subtotal
+                shipping = 0.02 * subtotal; // 2% of subtotal
             }
             //compute grant total
             var total = subtotal + tax + shipping;
@@ -151,10 +154,11 @@
     </table>
           <div> 
             <br>
-            <b>OUR SHIPPING POLICY IS:A subtotal $0 - $99.99 will be $50 shipping
-            <br>A subtotal $100 - $299.99 will be $100 shipping
-            <br>Subtotals over $300 will be charged 5% of the subtotal amount</b>
+            <b>OUR SHIPPING POLICY IS:A subtotal $0 - $99.99 will be $100 shipping
+            <br>A subtotal $100 - $299.99 will be $50 shipping
+            <br>Subtotals over $300 will be charged 3% of the subtotal amount</b>
            
           </div>
+          <input type="button" class="button" value="Back to Home" onclick="window.location.href = 'products_display.html';">
     </body>
     </html>

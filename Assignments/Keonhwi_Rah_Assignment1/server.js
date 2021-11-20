@@ -1,11 +1,9 @@
 //This is server for the store app, based on lab13 and screencast 
-
-var products_array = require('./public/products_data');
-
+//borrow this from Xinfei
 var express = require('express');
 var app = express();
 
-var data = require('./public/products_data.js');
+var data = require('./Public/product_data.js');
 var products = data.products;
 
 const qs = require('querystring');
@@ -30,7 +28,7 @@ function isNonNegInt(q, returnErrors = false) {
     if (q == '') q = 0;
     if (Number(q) != q) errors.push('Not a number!'); // Check if string is a number value. 
     else {
-        if(q>25) errors.push('Not enough in stock. '); //checks quanitity
+        if(q>10) errors.push('Not enough in stock. '); //checks quanitity
         if (q < 0) errors.push('Negative value!'); // Check if it is non-negative
 
         if (parseInt(q) != q) errors.push('Not an integer!'); // Check that it is an integer
@@ -50,34 +48,44 @@ app.post("/process_form", function (request, response) {
     // check to make user inputs some value
 
    // check is quantities are valid (nonnegint and have inventory)
-   var errors = {};
+   var errors = {};//this will create object with nothing in it ro store errors if we find any
 
-
+    //loop through all the quantitiy and see if there is any error
     for(i in request.body.quantity) {
-        if(!isNonNegInt(request.body.quantity[i])) {
+        //this will recognize if there are any isnonnegint
+        if(isNonNegInt(request.body.quantity[i]) == false) { //
             console.log(`${request.body.quantity[i]} is not a valid quantity for ${products[i].brand}`);
             errors['quantity'+i] = `${request.body.quantity[i]} is not a valid quantity for ${products[i].brand}`;
         
         }
-        if((!isNonNegInt)>products[i].inventory){
-            errors['inventory'+i] = ` We do not have ${request.body.quantity[i]} products in stock for ${products[i].brand} sorry for inconvenience ` ;
-        
-        
+        // this check if we have enough inventory
+        if(request.body.quantity[i]>products[i].inventory){
+            errors['inventory'+i] = `We do not have ${request.body.quantity[i]} products in stock for ${products[i].brand} sorry for inconvenience ` ;
+          
+    }
+    //did they select any value
+    if(request.body.quantity[i]>0){
+        var has_quantities = true;
     }
 }
+    // If has_quanties is undfined, no quantities were selected
+    if(typeof has_quantities == 'undefined') {
+        errors['no_quantities'] = `You need to make selection`;
+    }
     
+    // create query string of all the quantities
    let qty_obj = {"quantity": JSON.stringify(request.body.quantity)};
-   if(Object.keys(errors).length === 0) {
-      
 
     //If data is valid, create invoice
+   if(Object.keys(errors).length === 0) {
+      
     response.redirect('./invoice.html?' + qs.stringify(qty_obj));
    } else {
     qty_obj.errors = JSON.stringify(errors);
-    response.redirect('./products_display.html?' + qs.stringify(qty_obj));
+    response.redirect('./Products_display.html?' + qs.stringify(qty_obj) + '&err_obj='+qty_obj.errors);
    }
 });
 //route all other GEt requests to files in the public folder. 
-app.use(express.static('./public'));
+app.use(express.static('./Public'));
 
 app.listen(8080, () => console.log(`listening on port 8080`)); // note the use of an anonymous function here to do a callback

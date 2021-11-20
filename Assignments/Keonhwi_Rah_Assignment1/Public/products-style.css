@@ -27,24 +27,26 @@
   
   
   h1 {
-    font-size: 5rem;
-    background-size: 48px 48px;
+    font-size: 7rem;
+    background-size: 60px 60px;
     background-blend-mode: lighten;
   }
   
   h2 {
     font-size: 2rem;
     color: rgb(56, 129, 212);
-    text-align: right;
+    text-align: left;
     width: 160px;
     position: absolute;
     right: 4%;
     z-index: 3000;
-    text-shadow: 2px 2px 1px black;
-    line-height: 2rem;
-    padding-top: 0.3rem;
+    line-height: 10rem;
+    padding-top: 0.9rem;
   }
   
+  h3{
+  
+  }
   p {
     font-size: 1.5rem;
   }
@@ -54,33 +56,14 @@
   
   
   header, aside, main, footer {
-    padding: 20px;
+    padding: 10px;
   }
   
-  header {
-    border: 5px solid black;
-    border-bottom: 0;
-  }
-  
-  aside {
-    border-right: 5px solid black;
-  }
-  
-  
-  body > div {
-    border: 5px solid black;
-    display: flex;
-  }
-  
-  
-  footer {
-    border: 5px solid black;
-    border-top: 0;
-  }
-  
+    
   footer h1 {
     font-style: italic;
     font-size: 3rem;
+    position:relative
   }
   
   aside {
@@ -96,16 +79,18 @@
   
   main {
     display: flex;
-    flex-flow: row wrap;
+    border: mediumblue;
+    border-radius: 2rem;
+    flex-flow: row;
     justify-content: space-around;
   }
   
   
   aside {
-    display: small;
-    align-items: small;
-    background: url(images/board.jpg) no-repeat 50% center;
-    padding: 50px 0;
+    display: medium;
+    align-items: large;
+    background: url(images/board.jpg) no-repeat 100% center;
+    padding: 30px 0;
   }
   
   aside div {
@@ -117,41 +102,50 @@
   
   
   section {
-    width: 70%;
+    width: 200%;
     margin: 5px;
     background-color: lightskyblue;
     position: relative;
-    height: 230px;
+    height: 300px;
   }
   
   section p {
     color: white(56, 129, 212);
     background: grey;
-    width: 50px;
-    height: 50px;
-    line-height: 50px;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
     text-align: center;
-    border-radius: 50%;
+    border:mediumblue;
+    border-radius: 10rem;
     box-shadow: 2px 2px 1px rgb(56, 129, 212);
     position: absolute;
-    right: 10px;
-    bottom: -6px;
+    right: 1px;
+    bottom: 190px;
     z-index: 2000;
   }
   
   
   .item {
-    background-size: 234px 24px;
+    background-size: 200px 24px;
   }
   
   
   .item img {
-      width: 200px;
+      width: 170.5px;
       height: 200px; 
-      
+      border: blue;
+      border-radius: 2rem;
       display: block;
       position: absolute;
       bottom: 0px;
       
   }
+  label{
+    font-size: 1.6rem;
+  }
   
+
+  header{
+    
+  }
