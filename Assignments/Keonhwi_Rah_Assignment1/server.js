@@ -3,7 +3,7 @@
 var express = require('express');
 var app = express();
 
-var data = require('./Public/product_data.js');
+var data = require('./product_data.js');
 var products = data.products;
 
 const qs = require('querystring');
@@ -15,7 +15,7 @@ app.all('*', function (request, response, next) {
 });
 
 //Get request for products data
-app.get('/products.js', function (request, response) {
+app.get('/product_data.js', function (request, response) {
     response.type('.js');
     var products_str = `var products = ${JSON.stringify(products)};`;
     response.send(products_str);
@@ -78,11 +78,14 @@ app.post("/process_form", function (request, response) {
 
     //If data is valid, create invoice
    if(Object.keys(errors).length === 0) {
-      
+    //purchase is valid remove quatities from inventory
+      for(i in request.body.quantity){
+          products[i].inventory -= Number(request.body.quantity[i]);
+      }
     response.redirect('./invoice.html?' + qs.stringify(qty_obj));
    } else {
     qty_obj.errors = JSON.stringify(errors);
-    response.redirect('./Products_display.html?' + qs.stringify(qty_obj) + '&err_obj='+qty_obj.errors);
+    response.redirect('./products_display.html?' + qs.stringify(qty_obj) + '&err_obj='+qty_obj.errors);
    }
 });
 //route all other GEt requests to files in the public folder. 
