@@ -1,0 +1,94 @@
+<!--helped and borrow some cod from Xinfei-->
+
+<script src="./product_data.js"></script>
+
+<!DOCTYPE html>
+<html>
+    <script>
+		let params = (new URL(document.location)).searchParams;
+	window.onload = () =>  {
+		if(params.has('purchase_submit')) {
+			var quantities = JSON.parse(params.get('quantity'));
+			for(i in quantities) {
+				order_form[`quantity[${i}]`].value = quantities[i];
+			}
+		}
+		
+		//set up so if errors occur, it will alert the user in a pop up
+		if(params.has('errors')) {
+			var errors = JSON.parse(params.get('errors')); 
+			let err_str = '';
+			for(err in  errors) {
+				err_str += errors[err] + '\n';
+			}
+			alert(err_str);
+		}
+	}
+
+//code from lab 12 borrow from XInFei
+function isNonNegInt(q, return_errors = false) {
+        errors = []; // assume no errors at first
+        if (q == '') q = 0; // handle blank inputs as if they are 0
+        if (Number(q) != q) errors.push('<font color="red">Not a number!</font>'); // Check if string is a number value
+        else if (q > 10) errors.push('<font color="red">Only 10 in stock</font>');
+        else if (q == 0) errors.push('<font color="red">Please select!</font>');
+        else if (q < 0) errors.push('<font color="red">Negative value!</font>'); // Check if it is non-negative
+        else if (parseInt(q) != q) errors.push('<font color="red">Not an integer!</font>'); // Check that it is an integer
+        return return_errors ? errors : (errors.length == 0);
+    }
+
+
+	</script>
+<head>
+    <meta charset="utf-8">
+    <title>Surf Board Store</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link href="./products-style.css" rel="stylesheet">
+</head>
+
+<body>
+    
+    <header id="header">
+        <div class="innertube">
+        <h1>Kenny's Surf Board Store</h1>
+        <form name="order_form" action="./process_form" method="POST"></form>
+    </div>
+</header>
+    <div id="mainwrapper">
+        <aside>
+            <div style="font-size:3rem;text-align:center;font-weight: bold;font-style: italic; color: rgb(36, 198, 226)">
+               Available Products
+            </div>
+        </aside>
+
+        <main>
+            
+
+            <form name="quantity_form" action="./process_form" method="post">
+                <div>
+                    <main>
+                        <script>
+                            for (i = 0; i < products.length; i++) {
+                                document.write(`
+                                <section class="item">
+                                    <h3>${products[i].brand}</h3>
+                                    <p>$${products[i].price}</p>
+									<label id="quantity${i}_label">${products[i].inventory} in stock</label>
+									<input type="text" placeholder="Enter Desired Amount" name="quantity[${i}]">
+                                    <img src=${products[i].image}>
+                                </section>
+                                `); }
+                        </script>
+                    </main>
+                </div>
+         <h3 style="font-size: large;">Best place to shop your surf boards!</h3>
+                    <!--this is houw we will be able to et the invoice-->
+                    <br><input type="submit" class="button" value="Purchase" id="submit" name="purchase_submit">
+                </form>
+    
+</body>
+
+</html>
