@@ -1,8 +1,10 @@
 <!--sample from the Invoice WODS-->
 <link href="./products-style.css" rel="stylesheet" />
+<script src="product_data.js"></script>
+  <!--/* This file is made to show a table and receipt of certain products. There will be a total of 6 products, with their prices and quantity. */-->
 <script src="/Assignments/Rah_Keonhwi_Assignment2/user_data.json" type="json"></script>
 <script>
-  let params = (new URL(document.location)).searchParams;
+let params = (new URL(document.location)).searchParams;
 
 // If logged in, put a welcome message, otherwise send them to login
 if (params.has('username')) {
@@ -12,24 +14,24 @@ if (params.has('username')) {
 else {
     window.location.href = "./login.html";
 }
-  var quantities = [];
-    //product quantities are in the querystring, get them and put into quantites array
-    // form was submitted so process the invoice
-    if (params.has('purchase_submit')) {
-        for (i = 0; i < products.length; i++) {
-            if (params.has(`quantity${i}`)) {
-                a_qty = params.get(`quantity${i}`);
-                quantities[i] = a_qty;
-            }
-        }
+var quantities = [];
+ //product quantities are in the querystring, get them and put into quantites array
+ // form was submitted so process the invoice
+if (params.has('purchase_submit')) {
+    for (i = 0; i < products.length; i++) {
+        if (params.has(`quantity${i}`)) {
+            a_qty = params.get(`quantity${i}`);
+            quantities[i] = a_qty;
+         }
     }
-    console.log(quantities);
-</script>
-
-<script src="product_data.js">
-  /* This file is made to show a table and receipt of certain products. There will be a total of 6 products, with their prices and quantity. */
+ }
+console.log(quantities);
 
 </script>
+
+
+
+
 
 <script>
 
@@ -88,6 +90,16 @@ else {
     </head>
     <header style="font-size:3rem;text-align:center;font-weight: bold;font-style: italic;border:cornflowerblue; border-radius: 3rem;" >Invoice</header>
     <body>
+      <script>
+        // show the username to make sure they login the correct account
+        if (username != 'undefined' && username != '') {
+            //if the username is correct, then show this
+            document.write(`<div class="center"><h5><b>${username}! Please Review Your Itmes Below!</b><h5></div>`)
+        }
+        else {
+            document.write(``)
+        }
+    </script>
       <table class=".w3-table-all w3-card-4">
         <thead>
             <tr class=".w3-blue">

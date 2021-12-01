@@ -2,7 +2,7 @@
 //borrow this from Xinfei
 var express = require('express');
 var app = express();
-
+var myParser = require("body-parser");
 var data = require('./product_data.js');
 var products = data.products;
 // loads starts up fs system actions
@@ -217,6 +217,7 @@ app.post("/process_form", function (request, response) {
     qty_obj.errors = JSON.stringify(errors);
     response.redirect('./products_display.html?' + qs.stringify(qty_obj) + '&err_obj='+qty_obj.errors);
    }
+   
 });
 
 
