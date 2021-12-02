@@ -11,7 +11,7 @@ var fs = require('fs');
 var filename = './user_data.json';
 // used to store quantity data from products disiplay page
 var temp_qty_data = {};
-const qs = require('querystring');
+
 
 // Monitors all requests
 app.all('*', function (request, response, next) {
@@ -65,9 +65,9 @@ app.use(express.urlencoded ({extended: true }));
         // Put the stored quanity data into the query
         //add username to query to know who's login
         //to get the username and email from the informaation that user entered, and store it in the temp_qty_data
-        temp_qty_data['username'] = the_username;
-        temp_qty_data['email'] = user_data[the_username].email;
         let params = new URLSearchParams(temp_qty_data); //put the temp_qty_data inside the params
+        params.append('username', the_username); // add the username to the query
+        params.append('email', user_data[the_username].email); // add email to the query
         res.redirect('/invoice.html?' + params.toString());//if good to go, send to invoice page with the username and email to the string
         return;
   
@@ -155,10 +155,10 @@ app.use(express.urlencoded ({extended: true }));
       fs.writeFileSync(filename, JSON.stringify(user_data), "utf-8");
       // Put the stored quanitiy data into the temp_qty_data
       //get the username and email from the register information
-      temp_qty_data['username'] = username;
-      temp_qty_data['email'] = user_data[username]["email"];
       let params = new URLSearchParams(temp_qty_data);
-      res.redirect('/invoice.html?' + params.toString());// if good to go, send the user to invoice page with query string
+      params.append('username', the_username); // add the username to the query
+      params.append('email', user_data[the_username].email); // add email to the query
+      res.redirect('/login.html?' + params.toString());// if good to go, send the user to invoice page with query string
     }
   
     //if error occurs, redirect to register page
@@ -212,10 +212,11 @@ app.post("/process_form", function (request, response) {
       for(i in request.body.quantity){
           products[i].inventory -= Number(request.body.quantity[i]);
       }
-    response.redirect('./login.html?' + qs.stringify(qty_obj));
+      temp_qty_data = qty_obj; // save the quantity data for later
+    response.redirect('./login.html?');
    } else {
     qty_obj.errors = JSON.stringify(errors);
-    response.redirect('./products_display.html?' + qs.stringify(qty_obj) + '&err_obj='+qty_obj.errors);
+    response.redirect('./products_display.html?' + '&err_obj='+qty_obj.errors);
    }
    
 });

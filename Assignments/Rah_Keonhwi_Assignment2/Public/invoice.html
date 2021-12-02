@@ -14,18 +14,7 @@ if (params.has('username')) {
 else {
     window.location.href = "./login.html";
 }
-var quantities = [];
- //product quantities are in the querystring, get them and put into quantites array
- // form was submitted so process the invoice
-if (params.has('purchase_submit')) {
-    for (i = 0; i < products.length; i++) {
-        if (params.has(`quantity${i}`)) {
-            a_qty = params.get(`quantity${i}`);
-            quantities[i] = a_qty;
-         }
-    }
- }
-console.log(quantities);
+
 
 </script>
 
