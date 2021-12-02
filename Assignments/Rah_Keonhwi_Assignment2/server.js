@@ -156,9 +156,9 @@ app.use(express.urlencoded ({extended: true }));
       // Put the stored quanitiy data into the temp_qty_data
       //get the username and email from the register information
       let params = new URLSearchParams(temp_qty_data);
-      params.append('username', the_username); // add the username to the query
-      params.append('email', user_data[the_username].email); // add email to the query
-      res.redirect('/login.html?' + params.toString());// if good to go, send the user to invoice page with query string
+      params.append('username', username); // add the username to the query
+      params.append('email', user_data[username].email); // add email to the query
+      res.redirect('/invoice.html?' + params.toString());// if good to go, send the user to invoice page with query string
     }
   
     //if error occurs, redirect to register page
