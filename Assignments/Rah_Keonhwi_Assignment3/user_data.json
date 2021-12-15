@@ -1,1 +1,17 @@
-{"itm352":{"name":"ITM 352","password":"asdfasd","email":"itm352@hawaii.edu"},"dport":{"name":"Dan Port","password":"asdfasdf","email":"dport@hawaii.edu"},"kazman":{"name":"Rick Kazman","password":"asdfasdf","email":"kazman@hawaii.edu"},"kenny":{"name":"Kenny","password":"asdasd","email":"Keonhwi@hawaii.edu"},"keonhwi":{"name":"Keonhwi Rah","password":"asdasd","email":"keonhwi@hawaii.edu"},"keonhwiasd":{"name":"Keonhwi Rah","password":"asdasd","email":"keonhwi@hawaii.edu"}}
+{
+    "itm352": {
+        "name": "ITM 352",
+        "password": "asdfasd",
+        "email": "itm352@hawaii.edu"
+    },
+    "dport": {
+        "name": "Dan Port",
+        "password": "asdfasdf",
+        "email": "dport@hawaii.edu"
+    },
+    "kazman": {
+        "name": "Rick Kazman",
+        "password": "asdfasdf",
+        "email": "kazman@hawaii.edu"
+    }
+}
