@@ -6,7 +6,7 @@ app.use(cookieParser());
 var nodemailer = require('nodemailer');
 const e = require('express');
 const shift = 4;
-var data = require('./product_data');
+var data = require('./Public/product_data');
 var allProducts = data.allProducts;
 // loads starts up fs system actions
 var fs = require('fs');
@@ -14,6 +14,7 @@ var fs = require('fs');
 var filename = './user_data.json';
 // used to store quantity data from products disiplay page
 var session = require('express-session');
+var temp_qty_data = {};
 //From Lab 15 intializes sessions
 app.use(session({ secret: "MySecretKey", resave: true, saveUninitialized: true }));
 
@@ -40,7 +41,7 @@ app.post("/get_cart", function (req, res) {
   res.json(req.session.cart);
 });
 
-// Professor Port helped me with this code
+
 // Use GET to (get)convert my products.js file
 app.get('/product_data.js', function (request, response, next) {
   response.type('.js');
@@ -234,7 +235,7 @@ app.post("/process_form", function (req, res, next) {
 
   var errors = {};
   // assume no quantities from the start, so set no quantities error 
-  // Professor Port helped me with the code below
+  
   //if user enter empty quantities, show this text
   errors['no_quantities'] = 'Please enter some quantities';
   products = allProducts[product_key];
@@ -253,7 +254,7 @@ app.post("/process_form", function (req, res, next) {
     }
   }
 
-  // Professor Port helped me with the codes below
+
   if (JSON.stringify(errors) === '{}') {
     // keep the quanity data in the sesssion 
     if (typeof req.session.cart == 'undefined') {

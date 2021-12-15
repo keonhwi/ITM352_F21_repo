@@ -39,7 +39,7 @@ var products = [
         "image": "https://www.mundo-surf.com/43361/surfboard-ms-flying-bee-round.jpg"
     }
 ];
-var Surfoards = [
+var Surfboards = [
 
     {
         brand: "Pyzel",
@@ -207,7 +207,7 @@ var Leash = [
 ];
 
 var allProducts = {
-    "Surfoards": Surfoards,
+    "Surfboards": Surfboards,
     "Bodyboards": Bodyboards,
     "Fins": Fins,
     "Leash": Leash
