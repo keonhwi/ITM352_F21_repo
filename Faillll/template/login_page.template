@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--References for formatting to login/registration page-->
+    <link rel="stylesheet" href="./login_registration_style.css">
+    <!--References for functions-->
+    <script src="./functions.js"></script>
+    <script>window.onload = function () { ${ incorrect_login } }</script>
+    <title>Login</title>
+
+</head>
+
+<!--Code adapted Assignment 2 Examples-->
+
+<body>
+
+    <h1>Please log in before purchasing</h1>
+
+<!--NAVIGATION BAR-->
+<nav>
+    <Button><a href="./index.html">Home</a></Button>
+    <Button><a href="./cart.html">Cart</a></Button>
+</nav>
+
+<div>
+
+<!--Code below is adapted from Assignment 2 Examples ("A simple login processing example")-->
+    <form action="process_login" method="POST">
+    <ul>
+
+<!--Username form-->
+    <li><label for="username"><b>Username</b></label></li><br>
+    <li><input type="text" name="username" size="40" placeholder="enter username" id="username" required value="${typeof request.body.username != 'undefined' ? request.body.username : ''}"></li>
+<!--If there are username errors, display in red color-->
+    <span style="color:red;">${incorrect_username.join(",")}</span><br>
+
+<!--Password form-->
+    <li><label for="password"><b>Password</b></label></li><br>
+    <li><input type="password" name="password" size="40" placeholder="enter password" password id="password" 
+    required value="${typeof request.body.username != 'undefined' ? request.body.username : ''}"></li>
+<!--If there are password errors, display in red color-->
+    <span style="color:red;">${incorrect_password.join(",")}</span><br>
+
+<!--Realign, style login (submit) button-->
+    <li><input type="submit" value="Login" 
+        style="margin-left: 185px; text-align: center; background-color: gray; font-size: 18px;  font-weight: 300;"
+        name="submit_button"></li>
+</ul>
+</form>
+</div>
+
+<!--Click to register page-->
+    <div class="login_redirect">
+    <p><a href="/register">Register</a></p>
+</div>
+</body>
+</html>

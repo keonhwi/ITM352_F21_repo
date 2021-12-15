@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!--Heavily adapted from Assignment 2 example ("A simple login processing example")-->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--References for functions-->
+    <script src="./functions.js"></script>
+    <!--link to the login_registration_style.css for formatting-->
+    <link rel="stylesheet" href="./login_registration_style.css">
+    <title>Registration</title>
+    <!--Alert if there are registration errors-->
+    <script>window.onload = function () { ${ reg_error } }</script>
+</head>
+
+<body>
+    <h1>To purchase items, please register!</h1>
+
+<!--NAVIGATION BAR-->
+<nav>
+    <Button><a href="./index.html">Home</a></Button>
+    <Button><a href="./cart.html">Cart</a></Button>
+</nav>
+    <div>
+        <!--User registration form: Inspiration taken from Assignment 2 Code Examples-->
+        <form action="process_register" method="POST">
+            <ul>
+                <!--Form for the fullname-->
+                    <li><label for="fullname"><b>Full Name</b></label></li><br>
+                    <li><input type="text" name="fullname" size="40" placeholder="enter your full name"
+                        value="${typeof request.body.fullname != 'undefined' ? request.body.fullname : ''}"></li>
+                <!--If there are full name errors, display in red color-->
+                    <span style="color:red;">${fullname_registration_errs.join(",")}</span><br>
+
+                <!--Form for the usernmae-->
+                    <li><label for="username"><b>Username</b></label></li><br>
+                    <li><input type="text" name="username" size="40" placeholder="enter username"
+                        value="${typeof request.body.username != 'undefined' ? request.body.username : ''}"></li>
+                <!--If there are username errors, display in red color-->
+                    <span style="color:red;">${username_registration_errs.join(",")}</span><br>
+                
+                <!--Form for the password-->
+                    <li><label for="password"><b>Password</b></label></li><br>
+                    <li><input type="password" name="password" size="40" placeholder="enter password" value="${typeof request.body.password != 'undefined' ? request.body.password : ''}"></li>
+                <!--If there are password errors, display in red color-->
+                    <span style="color:red;">${password_registration_errs.join(",")}</span>
+                        <br>
+                <!--Repeat password from-->
+                    <li><label for="psw-repeat"><b>Repeat</b></label></li><br>
+                    <li><input type="password" name="repeat_password" size="40" placeholder="enter password again" value="${typeof request.body.repeat_password != 'undefined' ? request.body.repeat_password : ''}"></li>
+                <!--If there are repeated pass errors, display in red color-->
+                    <span style="color:red;">${password_repeat_errs.join(",")}</span><br>
+                
+                <!--Form for the email-->
+                    <li><label for="email"><b>Email</b></label></li>
+                    <li><input type="email" name="email" size="40" placeholder="enter email" value="${typeof request.body.email != 'undefined' ? request.body.email : ''}"></li>
+                <!--If there are email errors, display in red color-->
+                    <span style="color:red;">${email_registration_errs.join(",")}</span><br>
+
+                <!--Format submit button (realignment and style)-->
+                    <input type="submit" value="Register"
+                        style="height:50px; width:125px; margin:auto 0; background-color: gray; font-size: 18px;  font-weight: 300; margin-left: 182px"
+                        name="submit_button">
+            </ul>
+        </form>
+    </div>
+    <!--Redirect to login page if clicked on-->
+    <div class="registration_redirect">
+        <p><a href="/login">Click here to sign in!</a></p>
+    </div>
+
+</body>
+
+</html>

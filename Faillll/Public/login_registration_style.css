@@ -1,0 +1,100 @@
+body {
+    position: relative;
+    width: 21cm;  
+    height: 29.7cm; 
+    margin: 0 auto; 
+    color: #001028;
+    font-family: Georgia, 'Times New Roman', Times, serif; 
+    font-size: 12px; 
+    background: url(./images/productbackground.jpg)
+  }
+
+/* Format the heading that says, "To purchase items, please register*/  
+h1 {
+    color: black;
+    font-size: 2.4em;
+    line-height: 1.4em;
+    font-weight: normal;
+    text-align: center;
+    margin: 0 0 20px 0;
+    background-color: gray;
+  }
+
+/*Style form submissions/text fields*/
+form li {
+  list-style: none;
+  margin-bottom: 5px;
+  }
+  
+  form ul li label{
+  float: left;
+  clear: left;
+  width: 100px;
+  text-align: center;
+  margin-right: 10px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 16px;
+  line-height: 42px
+  }
+  
+  form ul li input, select, span {
+  float: left;
+  margin-bottom: 10px;
+  }
+  
+  form textarea {
+  float: left;
+  width: 350px;
+  height: 50px;
+  }
+  
+  /*Style the register/submit button*/
+  [type="submit"] {
+    border: none;
+    color: whitesmoke;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+
+  }
+  
+  /*Center the "Click here to register"*/
+  p {
+    text-align: center;
+  }
+
+  /*Style div to be whitesmoke*/
+  div {
+    background: whitesmoke;
+    max-width:1200px;
+    height: 350px;
+  }
+
+  /*Format text and password boxes*/
+  input[type=text], input[type=password], input[type=email] {
+    width: 75%;
+    padding: 5px;
+    display: inline-block;
+    border-style: inset;
+    background: #f1f1f1;
+  }
+
+/*Style the border around the "Click here to register if you do not have an account*/
+div.login_redirect {
+  height:33px;
+  background:white;
+  font-size:24px;
+  }
+/*Style the border around the "Click here to sign in!*/
+div.registration_redirect {
+  height:30px;
+  background:white;
+  font-size:24px;
+  }
+
+/*Center nav bar*/
+nav {
+  text-align:center;
+  }

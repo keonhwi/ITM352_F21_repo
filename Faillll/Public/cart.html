@@ -1,0 +1,257 @@
+<script src="./functions.js"></script>
+<script src="./product_data.js" type="text/javascript"></script>
+
+<script>
+    // Adapted from Assignment 3 Code Examples
+    var cart;
+    loadJSON('get_cart', function (response) {
+        // Parsing JSON string into object
+        cart = JSON.parse(response);
+        console.log(typeof JSON.parse(response));
+
+    });
+    console.log(cart);
+    var quantities = []; // Sets an empty array as the quantities variable
+
+    // If cart is empty, send alert and go back
+    if (cart.length == 0) {
+        history.go(-1); // goes back to previous page if empty 
+        alert('Shopping Cart is Empty! Please Select Products');
+    };
+
+    // Referenced from W3 schools "Javascript Cookies"
+    // Decodes cookie
+    function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    };
+
+    // Referenced from Stack Overflow
+    // Takes user back to previous page
+    function GoBackWithRefresh(event) {
+        var past = document.referrer;
+        var pastPage = past.split('/').pop();
+
+        if (pastPage != './login' && pastPage != 'register.html' && pastPage != 'cart.html') {
+            window.location = past;
+        } else if (pastPage == './login' && pastPage == 'register.html' && pastPage == 'cart.html') {
+            window.history.go(-2); //go back 2 pages instead of to that last page if it was login, cart or register
+        } else {
+            window.location.href = './index2.html'; //takes you to home page
+        }
+    };
+
+    //Validates cart data --> Makes sure user is logged in
+    function checkCart() {
+        if (cart.length == 0) {
+            console.log(cart)
+            alert(`Please select items before purchasing`);
+            window.location.href = '/index.html'
+        } else if (theUsername == '') {
+            alert(`Please log in before viewing cart`);
+            window.location.href = './login';
+        } else {
+            fetch("/generateInvoice?cartData=" + JSON.stringify(cart) + "&cookieData=" + JSON.stringify(document.cookie),
+                {
+                    method: "GET"
+                }).then(function (res) {
+                    return res.text();
+                }).then(function (data) {
+                    document.write(data);
+                })
+        }
+    }
+
+</script>
+<!--Heavily Adapted from Order Page Ex4-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+
+</head>
+
+<body>
+
+    <!-- Header -->
+    <!DOCTYPE html>
+    <html>
+    <title>Cart</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <body>
+        <link rel="stylesheet" href="invoice-style.css">
+        <nav style="width: 100%; text-align: center;">
+            <button><a href="./index.html">Back to home</a></button>
+            
+            
+            <script>
+                var username = getCookie('username');
+                if (username != "") {
+                    document.write(`<Button><a href="./logout">Logout</a>;</Button>`);
+                } else {
+                    document.write(`<Button><a href="./login">Login</a></Button>`);
+                }
+            </script>
+            <div style="background-color: gray;">
+
+                <!--Referenced from Meghan Nagai (advice given)-->
+                <script> // Personalized thank you message
+                    var theUser = getCookie('name');
+                    var theUsername = getCookie('username');
+                    if (theUsername != '') {
+                        document.write(`
+                <h1 align="center">Hi ${theUsername}! You are logged in! Check your quantities before checking out! </h1>
+            `)
+                    } else { // If no cookie, writes that you are not logged in
+                        document.write(`
+                <h1 align="center">You are not logged in: Click <a href="./login">here</a> to log in</h1>
+            `)
+                    };
+                </script>
+            </div>
+        </nav>
+        </div>
+        </section>
+        <br>
+
+        <!--INVOICE TABLE-->
+        <section id="one" class="wrapper style1"></section>
+        <title>Shopping Cart</title>
+        <table>
+            <tbody>
+                <div>
+                    <!--Headings of each element-->
+                    <tr>
+                        <th style="text-align: center;" width="43%">Item</th>
+                        <th style="text-align: center;" width="11%">Quantity</th>
+                        <th style="text-align: center;" width="13%">Price</th>
+                        <th style="text-align: center;" width="54%">Extended Price</th>
+                    </tr>
+                </div>
+                <script>
+
+                    subtotal = 0; // Set subtotal as 0 at first
+                    for (pk in cart) {
+
+                        for (i in cart[pk]) {
+
+                            qty = cart[pk][i];
+                            if (qty > 0) { //there has to be at least one quantity entered
+                                product_price = parseInt(allProducts[pk][i].price)
+                                extended_price = qty * product_price
+
+                                subtotal += extended_price;
+
+                                document.write(`
+                            <tr>
+                                <td style= "text-align: left" width="40%">${allProducts[pk][i].product}</td>
+                                <td width="20%">${qty}
+                                <td width="20%">\$${allProducts[pk][i].price}</td>
+                                <td  width="20%">\$${extended_price}</td>
+                            </tr>
+                        `);
+                            }
+                        }
+                    }
+                    // All equations (tax, shipping, total) below are from Invoice4 WOD but adapted to fit shipping policies of normal pen stores
+                    // Hawaii tax rate is 4%
+                    var tax_rate = 0.04;
+                    var tax = tax_rate * subtotal;
+                    // Compute shipping
+                    if (subtotal <= 100) {
+                        shipping = subtotal * 0.1; // To compensate cost of shipping for smaller items, shipping is 10% of the subtotal. 
+                    }
+                    else {
+                        shipping = 0.00; // Complementary shipping of $0 if subtotal is $100 or more
+                    }
+
+                    // Compute grand total
+                    var total = subtotal + tax + shipping
+
+                </script>
+
+                <tr>
+                    <!-- 
+                Creates row of space with "clear all" button
+                Code for clear all made with help from smashmagazine.com 
+            -->
+                </tr>
+
+                <tr>
+                    <td colspan="4" width="100%">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="3" width="67%">Sub-total</td>
+                    <td width="54%">$
+                        <script>document.write(subtotal.toFixed(2));</script>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" width="67%"><span>Tax at
+                            <script>document.write(100 * tax_rate);</script>%
+                        </span></td>
+                    <td width="54%">$
+                        <script>document.write(tax.toFixed(2));</script>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" width="67%">Shipping</span></td>
+                    <td width="54%">$
+                        <script>document.write(shipping.toFixed(2));</script>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" width="67%"><strong>Total</strong></td>
+                    <td width="54%"><strong>$
+                            <script>document.write(total.toFixed(2));</script>
+                        </strong></td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;" colspan="4"> <strong> A subtotal under $100 will have 10% shipping
+                            costs to compensate cost of shipping from an island<br>
+                            We offer free complementary shipping for any orders over $100 (Thank you for your
+                            support!)</strong>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </section>
+
+        <section>
+            <footer>
+                <!--Format the buttons at the bottom of invoice (One redirects to invoice, or redirects the user to continue shopping)-->
+                <center>
+                    <div class=end>
+                        <input type="submit"
+                            style="height:40px; width:200px; margin:auto 0; text-align: center; background-color: gray; font-size: 20px;  font-weight: 700;"
+                            value='Keep shopping!' class="button big special" onclick="GoBackWithRefresh()">
+
+                        <br><br>
+
+                        <input type="submit"
+                            style="height:40px; width:200px; margin:auto 0; text-align: center; background-color: white; font-size: 20px;  font-weight: 700; "
+                            value='Checkout!' class="button big special" name="purchase_submit_button"
+                            onclick="checkCart()">
+                        <br><br>
+                </center>
+                </div>
+            </footer>
+        </section>
+
+    </html>

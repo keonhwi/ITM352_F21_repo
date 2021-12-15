@@ -1,0 +1,191 @@
+ <script src="./functions.js"></script>
+  <script src="./product_data.js" type="text/javascript"></script> 
+  <!-- Retrieved style template from w-3 schools (TEMPLATE WAS "Food Blog Template") // Modified font to be Merriweather instead of Karma // -->
+  <link type="text/css" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link type="text/css" href="https://fonts.googleapis.com/css?family=Merriweather">
+  <title>Kenny's Surf Board Store</title>
+</head>
+<body>
+
+  <script>
+      // Referenced from Assignment 3 Code Examples
+        loadJSON('get_cart', function (response) {
+            // Parsing JSON string into object
+            shopping_cart = JSON.parse(response);
+        });
+        
+        // Adapted from products_display.html in previous Assignments
+        let params = (new URL(document.location)).searchParams;
+        if (params.has('products_key')) {
+          var product = params.get('products_key');
+        } else {
+          document.write('No products key in query string');
+          document.stop;
+        }
+      
+        // Function from W3 Schools
+        function getCookie(cname) {
+          var name = cname + "=";
+          var decodedCookie = decodeURIComponent(document.cookie); //decode the cookie
+          var ca = decodedCookie.split(';'); //split up string by ';'
+          for (var i = 0; i < ca.length; i++) { //split up by names
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+              c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+              return c.substring(name.length, c.length);
+            }
+          }
+          return "";
+        };
+
+  // Functions from /public/order_page.html in Lab 13 
+  // Checks if a string q is a non-neg integer. If returnErrors is true, the array of errors is returned, otherwise, returns true if q is a non-neg int. 
+  function isStringNonNegInt(q, returnErrors = false) {
+      errors = []; // assume no errors at first
+      if (q == '') q = 0
+      if (Number(q) != q) errors.push('<font color="#A52A2A"> Not a number!</font>'); // Check if string is a number value
+      else {
+          if (q < 0) errors.push('<font color="#A52A2A"> Negative value!</font>'); // Check if it is non-negative 
+          if (parseInt(q) != q) errors.push('<font color="#A52A2A"> Not an integer!</font>'); // Check that it is an integer 
+          if (q > 100) errors.push('<font color="#A52A2A"> Not enough inventory! </font>');
+      }
+          return returnErrors ? errors : (errors.length == 0);
+  }
+
+  // Is the textbox value a non-neg int?
+  function checkQuantityTextbox(theTextbox, theMsgSpan) {
+      // Is the textbox value a non-neg int?
+      var errors_array = isStringNonNegInt(theTextbox.value, true)
+      theMsgSpan.innerHTML = errors_array.join(" ") 
+  }
+
+  // Function heavily inspired from Meghan Nagai (advice was given)
+  function saveProduct(i) { // Saves quantity amount to cart
+  var amountProduct = product_form[`quantity${i}`].value;
+  if (isStringNonNegInt(amountProduct) == true && amountProduct <= 100) { // If there are no int errors and the quantity is less than the inventory
+
+    const data = { 'product_key': product, 'product_index': i, 'quantity': Number.parseInt(amountProduct) }; // Gets the product name, index, and the amount (turns it into a number)
+
+    fetch('./update_cart', {
+      method: 'POST', // or 'PUT'
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then(function (res) { return res.json(); })
+      .then(function (data) { 
+        // Adds the update cart from the server
+       return_message = JSON.parse(data);
+        document.getElementById(`cart${i}`).innerHTML = return_message.message; // Message that alerts user that the product has been added 
+       })
+
+  } else {
+    document.getElementById(`cart${i}`).innerHTML = 'Cannot add to cart: please enter valid amount!'; // If amount is not valid, alert user
+  }
+};
+</script>
+</script>
+
+<!-- Set background to productbackground.jpg (dark paper texture)  -->
+<body style="background-image: url(images/productbackground.jpg);  background-repeat: no-repeat; background-size:cover; margin: auto;">
+
+<!--NAVIGATION BAR-->
+<nav>
+  <button><a href="./index.html">Back to home</a></button>
+  <button><a href="./products_display.html?products_key=lamybrand">Long board</a></button>
+  <button><a href="./products_display.html?products_key=twsbibrand">Short board</a></button>
+  <button><a href="./products_display.html?products_key=kawecobrand">Accessories</a></button>
+  
+  <script>
+    var username = getCookie('username');
+    if (username != "") {
+      document.write(`<button><a href="./logout">Logout</a></button>`);
+    } else {
+      document.write(`<button><a href="./login">Login</a></button>`);
+    }
+  </script>
+  <button><a href="./cart.html">Cart</a></button>
+</nav>
+
+  <!-- Format style for product display page // Change font from Karma to Merriweather -->
+  <style>
+      body,h1,h2,h3,h4,h5,h6 {        
+        font-family: "Merriweather";
+        text-align: center;
+      }
+      .w3-bar-block .w3-bar-item {padding:20px}
+
+        /* Format navigation bar*/
+  nav {
+          padding-top: 100px;
+          text-align: center;
+        }
+  </style>
+    
+<!-- // Do a post request to /purchase, any data in this form (keys and values) will be put into post values --> 
+<form name="product_form" action="/purchase" method="POST">  
+
+<!-- Write page content (products and prices) // Loop to write values is heavily adapted  from SmartPhoneProducts3, products_display to fit Assignment1-->
+<div class="w3-main w3-content w3-padding" style="max-width:1200px;margin-top:100px"></div>
+<script>
+  for (i = 0; i < allProducts[product].length; i++)
+  document.write(`
+          <div class="w3-row-padding w3-padding-16 w3-center" style="color: whitesmoke">
+              <img src="${allProducts[product][i]['img']}"style="width:300px; height:300px; border: 3px solid #A52A2A; border-radius: 3px >
+              <div style="width=300px">
+              <h3><u>${allProducts[product][i]['product']}</u></h3>
+              <p>Brand: ${allProducts[product][i]['brand']}</p>
+              <p>Price: $${allProducts[product][i]['price']}</p>
+              <p>Quantity Left: ${allProducts[product][i]['quantity_available']}</p>
+              
+          <label>Quantity:</label>
+          <input id="textbox${i}" input type="text" 
+              name="quantity${i}" 
+              onkeyup="checkQuantityTextbox(this, quantity${i}_message);">
+          <span id='quantity${i}_message'>Enter a quantity</span></p>
+          <!--Formats the purchase button-->
+          <br><br>
+          <input type="button" value="Add to Cart"
+              style="height:40px; width:150px; margin:auto 0; text-align: center; background-color: gray; font-size: 18px;  font-weight: 700;"
+              name="addProducts${i}" onclick="saveProduct(${i})">
+          <span id="cart${i}"></span>
+            `)
+</script>
+</div>
+
+<footer>
+
+<!--referenced from Meghan Nagai and adapted from W3 schools Cookies-->
+<h1 class="w3-center" style="background-color: gray;">Login Information</h1>
+<div style="text-align: center;">
+  <script>
+    var theUser = getCookie('name');
+    var theUsername = getCookie('username');
+    var email = getCookie('email');
+    var lastVisited = getCookie('last_login_time');
+    if (theUsername != '') {
+      document.write(`
+            <p>Logged in as:${theUsername}</font><p> 
+        `)
+    } else {
+      document.write(`
+            <p>Not logged in. Please <a href="./login">login</a></p>
+        `)
+    if (amountProduct = 0) {
+      document.write(`
+        <p>Items in cart: ${amountProduct} </font><p>
+      `)
+    } else {
+      document.write(`No items in cart!`)
+    }
+    };
+  </script>
+
+
+</form>
+</footer>
+</body>
+</html>
