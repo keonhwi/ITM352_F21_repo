@@ -1,4 +1,5 @@
-//Most of the codes are from assignment 2 and some are borrow from Xinfei
+//Keonhwi Rah Professor Port Fall2021
+//Most of the codes are from assignment 2, labs and wods and big thanks to Xinfei for help and codes
 var express = require('express');
 var app = express();
 var cookieParser = require('cookie-parser');
