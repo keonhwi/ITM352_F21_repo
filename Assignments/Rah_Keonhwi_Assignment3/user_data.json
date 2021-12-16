@@ -1,17 +1,12 @@
 {
     "itm352": {
-        "name": "ITM 352",
-        "password": "asdfasd",
+        "name": "ITM Grader",
+        "password": "kvehiv",
         "email": "itm352@hawaii.edu"
     },
-    "dport": {
-        "name": "Dan Port",
-        "password": "asdfasdf",
-        "email": "dport@hawaii.edu"
-    },
-    "kazman": {
-        "name": "Rick Kazman",
-        "password": "asdfasdf",
-        "email": "kazman@hawaii.edu"
+    "kenny": {
+        "name": "Kenny",
+        "password": "teww{svh",
+        "email": "kenny@hawaii.edu"
     }
 }

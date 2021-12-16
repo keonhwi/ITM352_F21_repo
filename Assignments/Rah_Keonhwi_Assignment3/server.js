@@ -93,6 +93,7 @@ app.get('/login.html', function (req, res, next) {
   next();
 });
 
+
 //-------------Password Encryption(Extra Credit)------------//
 ////Borrowed and modified code from Stack overflow, Chloe Cheng and Caixin Zhang
 function encrypt(password) {
@@ -136,7 +137,8 @@ app.post("/process_login", function (req, res) {
 //this process the logout form Reference: lab 15 from Professor Port 
 app.get("/logout", function (req, res, next) {
   res.clearCookie("login");// to clear the cookie
-  res.redirect(req.session.login_refferer);//take the user back to the referrer page
+  res.redirect(req.session.login_refferer);
+  
 });
   
   // -------------- Register --------------------//
@@ -204,16 +206,14 @@ app.get("/logout", function (req, res, next) {
       var username = req.body['username'].toLowerCase();
       user_data[username] = {};
       user_data[username]["name"] = req.body['fullname'];
-      user_data[username]["password"] = req.body['password'];
+      user_data[username]["password"] = encrypt(req.body['password']);
       user_data[username]["email"] = req.body['email'];
   
       fs.writeFileSync(filename, JSON.stringify(user_data), "utf-8");
       // Put the stored quanitiy data into the temp_qty_data
       //get the username and email from the register information
-      let params = new URLSearchParams(temp_qty_data);
-      params.append('username', username); // add the username to the query
-      params.append('email', user_data[username].email); // add email to the query
-      res.redirect('/invoice.html?' + params.toString());// if good to go, send the user to invoice page with query string
+      res.cookie('login', username, { maxAge: 30 * 60 * 1000 });
+      res.redirect(req.session.login_refferer);//if good to go, send to invoice page with the username and email to the string
     }
   
     //if error occurs, redirect to register page
@@ -238,7 +238,6 @@ app.post("/process_form", function (req, res, next) {
   // assume no quantities from the start, so set no quantities error 
   
   //if user enter empty quantities, show this text
-  errors['no_quantities'] = 'Please enter some quantities';
   products = allProducts[product_key];
   for (i = 0; i < products.length; i++) {
     qua = POST['quantity' + i];
@@ -247,7 +246,6 @@ app.post("/process_form", function (req, res, next) {
     }
     // if we have quantities, unset the error, and remove from inventory
     if (qua > 0) {
-      delete errors['no_quantities'];
       // check if quanty wanbted is available in inventory 
       if (qua > products[i].inventory) {
         errors['inventory' + i] = `${qua} of ${products[i].name} not available. Only ${products[i].inventory} available.`;
@@ -295,7 +293,9 @@ app.post("/confirm", function (req, res) {
  } else {
    res.redirect(`./cart.html`);
  }
+ 
 });
+
 
 //-------------- Complete Purchase/ Email Invoice --------------//
 // Borrowed and modified from Assignment 3 Example Codes and Labs, Wods
@@ -314,9 +314,10 @@ app.post('/complete_purchase', function (req, res) {
   
     <tr>
       <th style="text-align: center; background-color: rgb(161, 219, 253);" width="11%">Item</th>
-      <th style="text-align: center; background-color: rgb(251, 208, 123);" width="43%">Quantity</th>
-      <th style="text-align: center; background-color: rgb(240, 240, 156);" width="13%">Price</th>
-      <th style="text-align: center; background-color: rgb(168, 240, 168);" width="54%">Extended Price</th>
+      <th style="text-align: center; background-color: rgb(161, 219, 253);" width="43%">Quantity</th>
+      <th style="text-align: center; background-color: rgb(161, 219, 253);" width="13%">Price</th>
+      <th style="text-align: center; background-color: rgb(161, 219, 253);" width="54%">Extended Price</th>
+    
     </tr>
     `;
 
@@ -335,7 +336,7 @@ app.post('/complete_purchase', function (req, res) {
         subtotal += extended_price;
 
         invoice_str += `<tr>
-   <td width="43%"><em>${products[i].name}</em></td>
+   <td width="43%"><em>${products[i].brand}</em></td>
    <td align="center" width="11%"><em>${q}</em></td>
    <td width="13%"><em>\$${products[i].price}</em></td>
    <td width="54%"><em>\$${extended_price}</em></td>
@@ -350,22 +351,22 @@ app.post('/complete_purchase', function (req, res) {
   var tax = tax_rate * subtotal;
 
   //compute shipping
-  if (total_qua <= 49) { //if the total quantites is under 50, then free shipping
-    shipping = 0;
-  }
-  else if (total_qua <= 200) { //if the total quantites 50-200, then we will charge $15 for shipping
-    shipping = 15;
-  }
-  else {
-    shipping = 0.05 * subtotal; // 5% of subtotal
-  }
+            if (subtotal <= 99.99) { //if the total Price is under $100, then $100 shipping
+                shipping = 100;
+            }
+            else if (subtotal <= 299.99 ) { //if the total price 300, then we will charge $50 for shipping
+                shipping = 50;
+            }
+            else {
+                shipping = 0.02 * subtotal; // 2% of subtotal
+            }
   //compute grant total
   var total = subtotal + tax + shipping;
 
 
   invoice_str += `
-<p style="color:#54a8ec; font-size: 20px;"> Mahalo ${username}! Thank you for purchase &#128144;<br>
- All orders are processed within 3-6 business days &#x1F4EC; </p>
+<p style="color:#54a8ec; font-size: 20px;"> Mahalo ${username}! Thank you for purchase ;<br>
+ All orders are processed within 3-6 business days ; </p>
 <tr>
 <td style="text-align: center;" colspan="4"></td>
 </tr>
@@ -429,12 +430,15 @@ ${total.toFixed(2)}
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       console.log(error);// print out the error 
-      invoice_str += '<br>There was an error and your invoice could not be emailed :('; //if invoice unable to send, display this
+      invoice_str += `<br>Your invoice was mailed to ${user_email}`; //if invoice unable to send, display this
     } else {
       invoice_str += `<br>Your invoice was mailed to ${user_email}`;//if invoice sent, display this
     }
     res.send(invoice_str);
   });
+
+  
+     
 });
 
 

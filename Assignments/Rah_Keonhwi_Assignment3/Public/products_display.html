@@ -5,9 +5,15 @@ Fall2021-->
 <script src="./product_data.js"></script>
 <script src="./functions.js"></script>
 
-
-
 <script>
+
+var shopping_cart;
+    loadJSON('./get_cart', function (response) {
+        // Parsing JSON string into object
+        shopping_cart = JSON.parse(response);
+    });
+
+
     let params = (new URL(document.location)).searchParams; // get the query string which has the form data
     //to get query string
     var product_key = "Surfboards";
@@ -37,6 +43,7 @@ Fall2021-->
 
 
     window.onload = function () {
+
 
         // form was submitted so check that quantities are valid then redirect to invoice if ok.
         if (params.has('purchase_submit')) {
@@ -96,7 +103,7 @@ Fall2021-->
     //if user login, send a welcome message, if not, it won't show the message, and they have to login
     if (getCookie('login') != '') {
         //it will show the username and if user click it one more time, it will logout by clear cookie
-        document.write(`<i div><a href="logout"></i><h5><b>&#129305; Welcome~ ${getCookie('login')} is Login now. Click here to Logout</h5></b></a></div>`)
+        document.write(`<Button><i div><a href="logout"></i><b> Welcome~ ${getCookie('login')} is Login now. Click here to Logout</b></a></div></Button>`)
     } else {
         document.write(`<a href="login.html"><i class="fa fa-fw fa-user"></i> <Button>Login</Button></a>`)
 
@@ -122,12 +129,16 @@ Fall2021-->
                         <script>
                              document.write(`<input type="hidden" name="prods_key" value="${product_key}">`);
                              for (i = 0; i < allProducts[product_key].length; i++) {
+                                 let qty = 0;
+                                 if(typeof shopping_cart[product_key] != 'undefined'){
+                                     qty = shopping_cart[product_key][`quantity${i}`];
+                                 }
                         document.write(`
                                 <section class="item">
                                     <h3>${allProducts[product_key][i].brand}</h3>
                                     <p>$${allProducts[product_key][i].price}</p>
 									<label id="quantity${i}_label"}"> ${allProducts[product_key][i].inventory} available</label>
-									<input type="text" placeholder="Enter Desired Amount" name="quantity${i}">
+									<input type="text" placeholder="Enter Desired Amount" name="quantity${i}" value="${qty}">
                                     <onkeyup="checkQuantityTextbox(this);">
                                     <img src=${allProducts[product_key][i].image}>
                                 </section>

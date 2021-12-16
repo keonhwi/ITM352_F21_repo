@@ -17,12 +17,7 @@ Fall2021-->
 </script>
 
 <script>
-  let params = (new URL(document.location)).searchParams;
-  //to get query string
-  var product_key = "Boards";
-  if (params.has('prod_key')) {
-      product_key = params.get('prod_key');
-  }
+ 
 
   // If logged in, put a welcome message, otherwise send them to login
   if (params.has('username')) {
@@ -46,21 +41,10 @@ Fall2021-->
     <title>Document</title>
     </head>
     <header style="font-size:3rem;text-align:center;font-weight: bold;font-style: italic;border:cornflowerblue; border-radius: 3rem;" >Invoice</header>
-    <body>
-      <script>
-        // show the username to make sure they login the correct account
-        if (username != 'undefined' && username != '') {
-            //if the username is correct, then show this
-            document.write(`<div class="center"><h5><b>${username}! Please Review Your Itmes Below!</b><h5></div>`)
-        }
-        else {
-            document.write(``)
-        }
-    </script>
-      <table class=".w3-table-all w3-card-4">
+    <table class="w3-table-all w3-card-4">
         <thead>
-            <tr class=".w3-blue">
-                <th>Item</th>
+            <tr class="w3-yellow">
+                <th>Brand</th>
                 <th>Quantity</th>
                 <th>Price</th>
                 <th>Extended price</th>
@@ -70,26 +54,30 @@ Fall2021-->
             //check if the quantites is valid or not, if it is good to go, then to invoice. 
             subtotal = 0;
             total_qua = 0; //make the total quantities is 0 at frist
-            for (i = 0; i < products.length; i++) {
-                if (quantities[i] > 0) {
-                    // product row
-                    total_qua += Number(quantities[i]); //convert string to number, in order to display number
-                    extended_price = quantities[i] * products[i].price;
-                    subtotal += extended_price;
-                    document.write(`
+            for (let prod_key in shopping_cart) {
+                let products = allProducts[prod_key];
+                for (i = 0; i < products.length; i++) {
+                    let q = Number(shopping_cart[prod_key][`quantity${i}`]);
+                    if (q > 0) {
+                        // product row
+                        total_qua += Number(q); //convert string to number, in order to display number
+                        extended_price = q * products[i].price;
+                        subtotal += extended_price;
+                        document.write(`
       <tr>
         <td width="43%"><em>${products[i].brand}</em></td>
-        <td align="center" width="11%"><em>${quantities[i]}</em></td>
+        <td align="center" width="11%"><em>${q}</em></td>
         <td width="13%"><em>\$${products[i].price}</em></td>
         <td width="54%"><em>\$${extended_price}</em></td>
       </tr>
       `);
 
+                    }
                 }
             }
-            //compute tax
+           //compute tax
 
-            var tax_rate = 0.04;
+           var tax_rate = 0.04;
             var tax = tax_rate * subtotal;
 
             //compute shipping
@@ -106,6 +94,9 @@ Fall2021-->
             var total = subtotal + tax + shipping;
 
         </script>
+        <tr>
+            <td style="text-align: center;" colspan="4"></td>
+        </tr>
         <tr>
             <td style="text-align: center;font-family: Garamond;" colspan="3" width="67%">Total Quantities</td>
             <td width="54%">
@@ -139,6 +130,7 @@ Fall2021-->
                     <script>document.write(total.toFixed(2));</script>
                 </strong></td>
         </tr>
+
         </tbody>
     </table>
           <div> 
@@ -150,7 +142,7 @@ Fall2021-->
           </div>
           <form action="/complete_purchase" method=POST>
 
-            <input type=submit class="button" value="Send to My Email">
+            <input type=submit class="button" value="Purchase">
         </form>
     </body>
     </html>
